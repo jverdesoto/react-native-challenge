@@ -34,6 +34,8 @@ export default class App extends Component {
       SlideBg: new Animated.Value(0),
       SlideWhite: new Animated.Value(0),
       SlideContent: new Animated.Value(0),
+      SlideContentCarousel: new Animated.Value(0),
+      fadeValueProd: new Animated.Value(0),
       fadeValue: new Animated.Value(0),
       carouselItems: [
         {
@@ -68,7 +70,7 @@ export default class App extends Component {
         easing: Easing.quad,
       }),
       Animated.timing(this.state.SlideWhite, {
-        toValue: 1,
+        toValue: 2,
         duration: 1000,
         useNativeDriver: true,
         delay: 500,
@@ -81,11 +83,25 @@ export default class App extends Component {
         delay: 800,
         easing: Easing.quad,
       }),
+      Animated.timing(this.state.SlideContentCarousel, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+        delay: 1200,
+        easing: Easing.quad,
+      }),
       Animated.timing(this.state.fadeValue, {
         toValue: 1,
         duration: 800,
         useNativeDriver: true,
         delay: 1000,
+        easing: Easing.quad,
+      }),
+      Animated.timing(this.state.fadeValueProd, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+        delay: 1300,
         easing: Easing.quad,
       }),
     ]).start();
@@ -96,7 +112,14 @@ export default class App extends Component {
   }
 
   render() {
-    let {SlideBg, SlideWhite, fadeValue, SlideContent} = this.state;
+    let {
+      SlideBg,
+      SlideWhite,
+      fadeValue,
+      SlideContent,
+      fadeValueProd,
+      SlideContentCarousel
+    } = this.state;
 
     return (
       <View style={styles.container}>
@@ -133,8 +156,8 @@ export default class App extends Component {
             transform: [
               {
                 translateY: SlideWhite.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [30, -220],
+                  inputRange: [0, 1, 2],
+                  outputRange: [30, -150, -220],
                 }),
               },
             ],
@@ -143,7 +166,7 @@ export default class App extends Component {
         <Animated.View
           style={{
             opacity: fadeValue,
-            flex: 1,
+            // flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
             paddingTop: 50,
@@ -152,17 +175,67 @@ export default class App extends Component {
               {
                 translateY: SlideContent.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [0, -20],
+                  outputRange: [0, -320],
                 }),
               },
             ],
           }}>
           <User />
+        </Animated.View>
+        <Animated.View
+          style={{
+            opacity: fadeValueProd,
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            // paddingTop: 50,
+            transform: [
+              {
+                translateY: SlideContent.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, -590],
+                }),
+              },
+            ],
+          }}>
           <Text style={styles.cart}>
             You have {this.state.carouselItems.length - 1}{' '}
             {this.state.carouselItems.length - 1 == 1 ? 'Product' : 'Products'}{' '}
           </Text>
+        </Animated.View>
+        <Animated.View
+          style={{
+            opacity: fadeValueProd,
+            // flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'absolute',
+            bottom: -90,
+            transform: [
+              {
+                translateY: SlideContentCarousel.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, -150],
+                }),
+              },
+            ],
+          }}>
           <ProductCarousel items={this.state.carouselItems} />
+        </Animated.View>
+        <Animated.View
+          style={{
+            opacity: fadeValue,
+            transform: [
+              {
+                translateY: SlideContentCarousel.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, -50],
+                }),
+              },
+            ],
+            position: 'absolute',
+            bottom: -50,
+          }}>
           <Controls />
         </Animated.View>
       </View>
